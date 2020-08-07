@@ -1,6 +1,6 @@
 Package: transCCA
 Title: Estimation of transelliptical CCA
-Version: 0.0.2
+Version: 0.0.1
 Authors@R: Benjamin W Langworthy
 Description: This has functions for transelliptical CCA point estimates and asymptotic variance estimates based on the transformed Kendall's scatter matrix estimator.
 Imports: pcaPP expm
