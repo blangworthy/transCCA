@@ -77,7 +77,7 @@ transCorVar <- function(x,y,i,eigenmin = 0.001){
   
   
   ydirvar <- Reduce("+",covmatsb)
-  outputlist <- list("XcoefVar" = xdirvar,
+  outputlist <- list("XCoefVar" = xdirvar,
                      "YCoefVar" = ydirvar,
                      "corVar" = varcor)
   return(outputlist)

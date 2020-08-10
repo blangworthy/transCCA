@@ -4,12 +4,14 @@
 \alias{transCCA}
 \title{Output transelliptical CCA directions and correlations}
 \usage{
-transCCA(x, y, eigenmin = 0.001)
+transCCA(x, y, ndir, eigenmin = 0.001)
 }
 \arguments{
 \item{x}{The first data matrix to be included in the calculation of the transformed Kendall scatter matrix}
 
 \item{y}{The second data matrix to be included in the calculation of the transformed Kendall scatter matrix}
+
+\item{ndir}{The number of canonical directions to estimate}
 
 \item{eigenmin}{The minimum eigenvalue when transforming matrix to be positive definite}
 }

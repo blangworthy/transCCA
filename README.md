@@ -21,9 +21,24 @@ sigmax <- diag(8)
 sigmay <- diag(8)
 sigmaxy <- diag(c(0.9,0.5,0.4,1/3,rep(0,4)))
 
-sigma <- rbind(cbind(sigmax,sigmaxy),cbind(sigmaxy,sigmay))
+sigma <- rbind(cbind(sigmax,sigmaxy),cbind(sigmaxy,sigmay))####Scatter matrix for simulated data
 
-z <- mvtnorm::rmvt(n=200,sigma = sigma,df = 5)
+z <- mvtnorm::rmvt(n=1000,sigma = sigma,df = 5)####Simulate from multivariate t distribution with 5 degrees of freedom
 
-transccout <- transCCA(z[,1:8],z[,9:16])
+transccout <- transCCA(z[,1:8],z[,9:16])####Estimate the transelliptical canonical directions and correlations
+
+dir1var <- transCorVar(z[,1:8],z[,9:16],1)####Asymptotic Variance estimates of transelliptical canonical directions and correlations
+
+####Upper and lower bound for asymptotic confidence intervals for first direction 
+
+xdir1ub <- transccout$xcoef[1,] + qnorm(0.975)*sqrt(diag(dir1var$XCoefVar)/nrow(z))
+xdir1lb <- transccout$xcoef[1,] - qnorm(0.975)*sqrt(diag(dir1var$XCoefVar)/nrow(z))
+
+ydir1ub <- transccout$ycoef[1,] + qnorm(0.975)*sqrt(diag(dir1var$YCoefVar)/nrow(z))
+ydir1lb <- transccout$ycoef[1,] - qnorm(0.975)*sqrt(diag(dir1var$YCoefVar)/nrow(z))
+
+####Upper and lower bound for asymptotic confidence intervals for correlations
+####Use bootstrap confidence intervals for transelliptical confidence correlations if sample size is small
+corub <- min(transccout$cancor[1] + qnorm(0.975)*sqrt(dir1var$corVar/nrow(z)),1)
+corlb <- max(transccout$cancor[1] - qnorm(0.975)*sqrt(dir1var$corVar/nrow(z)),0)
 ```
