@@ -3,13 +3,14 @@
 #'This takes two data sets and returns the transelliptical canonical directions and correlations
 #'@param x The first data matrix to be included in the calculation of the transformed Kendall scatter matrix
 #'@param y The second data matrix to be included in the calculation of the transformed Kendall scatter matrix
+#'@param ndir The number of canonical directions to estimate
 #'@param eigenmin The minimum eigenvalue when transforming matrix to be positive definite
 #'@return The estimate of transelliptical canonical correlations and directions
 #'@importFrom pcaPP cor.fk
 #'@importFrom expm sqrtm
 #'
 #'@export
-transCCA <- function(x,y,eigenmin=0.001){
+transCCA <- function(x,y,ndir,eigenmin=0.001){
   cormat<- transcorK(x,y,eigenmin)
   dimx <- ncol(x)
   dimy <- ncol(y)
@@ -28,10 +29,10 @@ transCCA <- function(x,y,eigenmin=0.001){
       xcoef[i,] <- xcoef[i,]*-1
     }
   }
-  rownames(xcoef[1:ndir,]) <- c("Direction",1:ndir)
-  colnames(xcoef) <- c("Var",1:ncol(x))
-  rownames(ycoef[1:ndir,]) <- c("Direction",1:ndir)
-  colnames(ycoef) <- c("Var",1:ncol(y))
+  rownames(xcoef)[1:ndir] <- paste("Direction",1:ndir)
+  colnames(xcoef) <- paste("Var",1:ncol(x))
+  rownames(ycoef)[1:ndir] <- paste("Direction",1:ndir)
+  colnames(ycoef) <- paste("Var",1:ncol(y))
   cancor <- sqrt(can.eig.vals.x$values[1:ndir])
   outputlist <- list("xcoef"= xcoef[1:ndir,],
                      "ycoef" = ycoef[1:ndir,],
