@@ -28,6 +28,10 @@ transCCA <- function(x,y,eigenmin=0.001){
       xcoef[i,] <- xcoef[i,]*-1
     }
   }
+  rownames(xcoef[1:ndir,]) <- c("Direction",1:ndir)
+  colnames(xcoef) <- c("Var",1:ncol(x))
+  rownames(ycoef[1:ndir,]) <- c("Direction",1:ndir)
+  colnames(ycoef) <- c("Var",1:ncol(y))
   cancor <- sqrt(can.eig.vals.x$values[1:ndir])
   outputlist <- list("xcoef"= xcoef[1:ndir,],
                      "ycoef" = ycoef[1:ndir,],
