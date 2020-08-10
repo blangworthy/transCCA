@@ -10,12 +10,14 @@
 #'@importFrom expm sqrtm
 #'
 #'@export
-transCCA <- function(x,y,ndir,eigenmin=0.001){
+transCCA <- function(x,y,ndir = NA,eigenmin=0.001){
   cormat<- transcorK(x,y,eigenmin)
   dimx <- ncol(x)
   dimy <- ncol(y)
+  if(is.na(ndir)){
   ndir <- min(dimx,dimy)
-  
+  }
+  if(ndir > min(dimx,dimy)){stop("Cannot compute more than min(ncol(x),ncol(y)) directions")}
   sigma.xx <- cormat[(1:dimx),(1:dimx)]
   sigma.yy <- cormat[(dimx+1):(dimx+dimy),(dimx+1):(dimx+dimy)]
   sigma.xy <- cormat[1:dimx,(dimx+1):(dimx+dimy)]
@@ -29,13 +31,22 @@ transCCA <- function(x,y,ndir,eigenmin=0.001){
       xcoef[i,] <- xcoef[i,]*-1
     }
   }
-  rownames(xcoef)[1:ndir] <- paste("Direction",1:ndir)
+  
+  xcoef <- xcoef[1:ndir,]
+  ycoef <- ycoef[1:ndir,]
+  if(ndir == 1){
+    names(xcoef) <- paste("Var",1:ncol(x))
+    names(ycoef) <- paste("Var",1:ncol(y))
+  }else{
+  rownames(xcoef) <- paste("Direction",1:ndir)
   colnames(xcoef) <- paste("Var",1:ncol(x))
-  rownames(ycoef)[1:ndir] <- paste("Direction",1:ndir)
+  rownames(ycoef) <- paste("Direction",1:ndir)
   colnames(ycoef) <- paste("Var",1:ncol(y))
+  }
+    
   cancor <- sqrt(can.eig.vals.x$values[1:ndir])
-  outputlist <- list("xcoef"= xcoef[1:ndir,],
-                     "ycoef" = ycoef[1:ndir,],
+  outputlist <- list("xcoef"= xcoef,
+                     "ycoef" = ycoef,
                      "cancor" = cancor)
   class(outputlist) <- 'transcca'
   return(outputlist)
