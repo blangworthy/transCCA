@@ -19,9 +19,9 @@ transCorVar <- function(x,y,i,eigenmin = 0.001){
   ndir <- min(dimx,dimy)
   if (i >min(dimx,dimy)){stop("subscript for canonical correlation out of bounds")}
   n <- nrow(x)
-  Lambda <- c(transCCA(x,y,eigenmin)$cancor,rep(0,max(dimx,dimy) - min(dimx,dimy)))
-  Ahat <- transCCAalldir(x,y,eigenmin)$xcoef
-  Bhat <- transCCAalldir(x,y,eigenmin)$ycoef
+  Lambda <- c(transCCA(x,y,eigenmin=eigenmin)$cancor,rep(0,max(dimx,dimy) - min(dimx,dimy)))
+  Ahat <- transCCAalldir(x,y,eigenmin=eigenmin)$xcoef
+  Bhat <- transCCAalldir(x,y,eigenmin=eigenmin)$ycoef
   
   
   vhatkend <- transcorKvar(x,y)
