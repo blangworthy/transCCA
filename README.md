@@ -42,3 +42,6 @@ ydir1lb <- transccout$ycoef[1,] - qnorm(0.975)*sqrt(diag(dir1var$YCoefVar)/nrow(
 corub <- min(transccout$cancor[1] + qnorm(0.975)*sqrt(dir1var$corVar/nrow(z)),1)
 corlb <- max(transccout$cancor[1] - qnorm(0.975)*sqrt(dir1var$corVar/nrow(z)),0)
 ```
+
+For further examples see the following
+[vignette](https://htmlpreview.github.io/?https://github.com/blangworthy/transCCA/blob/master/vignettes/transCCA.html)
