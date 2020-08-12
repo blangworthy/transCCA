@@ -1,0 +1,51 @@
+---
+title: "Transelliptical CCA examples"
+author: "Benjamin W. Langworthy"
+date: "`r format(Sys.Date(), '%m/%d/%Y')`"
+output:
+  rmarkdown::html_document:
+    highlight: pygments
+    toc: true
+    toc_float: true
+abstract: |
+  "transCCA" can be used to get estimated directions and correlations for transelliptical canonical correlation analysis (CCA) using the transformed Kendall's scatter matrix estimator. This includes both point estimates as well as estimates of the variance which can be used to construct asymptotic confidence intervals
+vignette: |
+  %\VignetteIndexEntry{transCCA examples}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Example of transelliptical CCA
+
+We give an example below of how to estimate transelliptical CCA and construct asymptotic confidence intervals. The data have radial diffusivity (RD) measures for 20 different white matter tracts measured using diffusion tensor imaging and five different executive function test scores for the same 210 children.
+
+```{r load, results="hide", message=FALSE}
+library(transCCA)
+data("rdef6yr")
+```
+
+After downloading the data we can obtain the point and variance estimates for first transelliptical CCA direction. The RD values for the 20 tracts are treated as our X data matrix and the five EF test scores are treated as the Y data matrix.
+
+```{r est, results="hide", message=FALSE}
+ccest <- transCCA(rdef6yr[,2:21],rdef6yr[,22:26],ndir = 1)
+ccvar <- transCorVar(rdef6yr[,2:21],rdef6yr[,22:26],i = 1)
+```
+
+After obtaining the estimates for the canonical direction and correlation as well as their variances we can use this to construct confidence intervals.
+
+
+```{r ci, results="hide", message=FALSE}
+xub <- ccest$xcoef + qnorm(0.975)*sqrt(diag(ccvar$XCoefVar)/210)
+xlb <- ccest$xcoef - qnorm(0.975)*sqrt(diag(ccvar$XCoefVar)/210)
+
+yub <- ccest$ycoef + qnorm(0.975)*sqrt(diag(ccvar$YCoefVar)/210)
+ylb <- ccest$ycoef - qnorm(0.975)*sqrt(diag(ccvar$YCoefVar)/210)
+
+corub <- min(ccest$cancor + qnorm(0.975)*sqrt(ccvar$corVar/210),1)
+corlb <- max(ccest$cancor - qnorm(0.975)*sqrt(ccvar$corVar/210),0)
+```
